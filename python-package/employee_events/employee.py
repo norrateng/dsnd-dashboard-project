@@ -1,17 +1,22 @@
 # Import the QueryBase class
 #### YOUR CODE HERE
+# from query_base import QueryBase
 
 # Import dependencies needed for sql execution
 # from the `sql_execution` module
 #### YOUR CODE HERE
+from employee_events import sql_execution
 
 # Define a subclass of QueryBase
 # called Employee
 #### YOUR CODE HERE
+class Employee(QueryBase):
 
     # Set the class attribute `name`
     # to the string "employee"
     #### YOUR CODE HERE
+    def __init__ (self):
+        self.name = "employee"
 
 
     # Define a method called `names`
@@ -19,6 +24,8 @@
     # This method should return a list of tuples
     # from an sql execution
     #### YOUR CODE HERE
+    @query
+    def names(self):
         
         # Query 3
         # Write an SQL query
@@ -28,13 +35,22 @@
         # This query should return the data
         # for all employees in the database
         #### YOUR CODE HERE
-    
+        # return f"""
+        #             SELECT str(first_name||' '||last_name)
+        #                  , employee_id
+        #             FROM employee
+        #         """
+
+        return "SELECT (first_name||' '||last_name), employee_id FROM employee"
+
 
     # Define a method called `username`
     # that receives an `id` argument
     # This method should return a list of tuples
     # from an sql execution
     #### YOUR CODE HERE
+    @query
+    def username(self, id):
         
         # Query 4
         # Write an SQL query
@@ -43,6 +59,8 @@
         # to only return the full name of the employee
         # with an id equal to the id argument
         #### YOUR CODE HERE
+       
+        return f"SELECT (first_name||' '||last_name), employee_id FROM employee where id = {id}"
 
 
     # Below is method with an SQL query
@@ -53,13 +71,16 @@
     # is returns containing the execution of
     # the sql query
     #### YOUR CODE HERE
+    @query
     def model_data(self, id):
 
-        return f"""
-                    SELECT SUM(positive_events) positive_events
-                         , SUM(negative_events) negative_events
-                    FROM {self.name}
-                    JOIN employee_events
-                        USING({self.name}_id)
-                    WHERE {self.name}.{self.name}_id = {id}
-                """
+        query_string = f"""
+            SELECT SUM(positive_events) positive_events
+                    , SUM(negative_events) negative_events
+            FROM {self.name}
+            JOIN employee_events
+                USING({self.name}_id)
+            WHERE {self.name}.{self.name}_id = {id}
+        """
+        
+        return pd.DataFrame(query_string)
