@@ -1,6 +1,6 @@
 # Import any dependencies needed to execute sql queries
 # YOUR CODE HERE
-from employee_events import sql_execution
+from sql_execution import query
 
 # Define a class called QueryBase
 # Use inheritance to add methods
@@ -42,7 +42,6 @@ class QueryBase:
         # YOUR CODE HERE
         sql_string = f"""select event_date, sum(positive_events), sum(negative_events) 
             from {self.name} 
-            full join 
             group by event_date 
             order by event_date
             """
