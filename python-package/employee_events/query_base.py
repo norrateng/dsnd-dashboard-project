@@ -41,13 +41,13 @@ class QueryBase:
         # of id columns used for joining
         # order by the event_date column
         # YOUR CODE HERE
-        sql_string = f"""select event_date, sum(positive_events), sum(negative_events) 
+        sql_string = f"""select event_date, sum(positive_events) as positive_events, sum(negative_events) as negative_events
             from {self.name} 
             where id = {id}
             group by event_date 
             order by event_date
             """
-        
+                
         return pd.DataFrame(sql_string)
     
 

@@ -74,7 +74,7 @@ class Header(BaseComponent):
         # return a fasthtml H1 objects
         # containing the model's name attribute
         #### YOUR CODE HERE
-        return H1(self.model)
+        return Div(H1(self.model))
           
 
 # Create a subclass of base_components/MatplotlibViz
@@ -91,34 +91,44 @@ class LineChart(MatplotlibViz):
         # the model's `event_counts` method to
         # receive the x (Day) and y (event count)
         #### YOUR CODE HERE
+        df = QueryBase.event_counts(entity_id)
         
         # Use the pandas .fillna method to fill nulls with 0
         #### YOUR CODE HERE
-        
+        df.fillna(0)
+
         # User the pandas .set_index method to set
         # the date column as the index
         #### YOUR CODE HERE
+        df.set_index(event_id)
         
         # Sort the index
         #### YOUR CODE HERE
+        df.sort_index()
         
         # Use the .cumsum method to change the data
         # in the dataframe to cumulative counts
         #### YOUR CODE HERE
-        
+        df.cumsum()
         
         # Set the dataframe columns to the list
         # ['Positive', 'Negative']
         #### YOUR CODE HERE
+        positive = df['positive_events'].values.tolist()
+        negative = df['negative_events'].values.tolist()
+        event_date = df['event_date'].values.tolist()
         
         # Initialize a pandas subplot
         # and assign the figure and axis
         # to variables
         #### YOUR CODE HERE
+        fig, (ax1, ax2) = plt.subplots(1,2, sharey = False)
         
         # call the .plot method for the
         # cumulative counts dataframe
         #### YOUR CODE HERE
+        ax1.plot(event_date, positive)
+        ax2.plot(event_date, negative)
         
         # pass the axis variable
         # to the `.set_axis_styling`
@@ -128,19 +138,25 @@ class LineChart(MatplotlibViz):
         # Reference the base_components/matplotlib_viz file 
         # to inspect the supported keyword arguments
         #### YOUR CODE HERE
+        set_axis_styling(ax1, bordercolor='black', fontcolor='black')
+        set_axis_styling(ax2, bordercolor='black', fontcolor='black')
         
         # Set title and labels for x and y axis
         #### YOUR CODE HERE
+        ax1.set_title('Positive and Negative Event Counts by Date')
 
 
 # Create a subclass of base_components/MatplotlibViz
 # called `BarChart`
 #### YOUR CODE HERE
+class BarChart(MatplotlibViz):
 
     # Create a `predictor` class attribute
     # assign the attribute to the output
     # of the `load_model` utils function
     #### YOUR CODE HERE
+    def __init__(self):
+        self.predictor = load_model()
 
     # Overwrite the parent class `visualization` method
     # Use the same parameters as the parent
@@ -243,14 +259,25 @@ class DashboardFilters(FormGroup):
 
 # Initialize a fasthtml app 
 #### YOUR CODE HERE
+app = FastHTML()
 
 # Initialize the `Report` class
 #### YOUR CODE HERE
 
 
+@app.route("/hello/{templated_variable}")
+def get(templated_variable:str):
+	
+	return 'hello ' + templated_variable
+
 # Create a route for a get request
 # Set the route's path to the root
 #### YOUR CODE HERE
+@app.route("/")
+def fyufyt():
+	return Div(
+      H1("Hello World!")
+      )
 
     # Call the initialized report
     # pass the integer 1 and an instance
