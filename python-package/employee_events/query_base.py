@@ -1,6 +1,6 @@
 # Import any dependencies needed to execute sql queries
 # YOUR CODE HERE
-from sql_execution import query
+from .sql_execution import query
 import pandas as pd
 
 # Define a class called QueryBase
