@@ -5,6 +5,7 @@ from query_base import QueryBase
 # Import dependencies for sql execution
 #### YOUR CODE HERE
 from sql_execution import query
+import pandas as pd
 
 # Create a subclass of QueryBase
 # called  `Team`

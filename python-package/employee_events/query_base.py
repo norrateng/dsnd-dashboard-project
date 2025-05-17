@@ -1,6 +1,7 @@
 # Import any dependencies needed to execute sql queries
 # YOUR CODE HERE
 from sql_execution import query
+import pandas as pd
 
 # Define a class called QueryBase
 # Use inheritance to add methods
@@ -42,6 +43,7 @@ class QueryBase:
         # YOUR CODE HERE
         sql_string = f"""select event_date, sum(positive_events), sum(negative_events) 
             from {self.name} 
+            where id = {id}
             group by event_date 
             order by event_date
             """

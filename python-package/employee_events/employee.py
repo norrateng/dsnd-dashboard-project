@@ -6,6 +6,7 @@ from query_base import QueryBase
 # from the `sql_execution` module
 #### YOUR CODE HERE
 from sql_execution import query
+import pandas as pd
 
 # Define a subclass of QueryBase
 # called Employee
