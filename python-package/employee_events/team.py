@@ -4,7 +4,7 @@ from .query_base import QueryBase
 
 # Import dependencies for sql execution
 #### YOUR CODE HERE
-from .sql_execution import query
+# from .sql_execution import query, pandas_query
 import pandas as pd
 
 # Create a subclass of QueryBase
@@ -23,7 +23,6 @@ class Team(QueryBase):
     # This method should return
     # a list of tuples from an sql execution
     #### YOUR CODE HERE
-    @query
     def names(self):
         
         # Query 5
@@ -32,17 +31,18 @@ class Team(QueryBase):
         # from the team table for all teams
         # in the database
         #### YOUR CODE HERE
-         return "SELECT team_name, team_id FROM team"
-    
+        return query(
+        "SELECT team_name, team_id FROM team"
+        )
 
     # Define a `username` method
     # that receives an ID argument
     # This method should return
     # a list of tuples from an sql execution
     #### YOUR CODE HERE
-    @query
-    def username(self, id):
 
+    def username(self, id):
+        return query(
         # Query 6
         # Write an SQL query
         # that selects the team_name column
@@ -50,8 +50,8 @@ class Team(QueryBase):
         # to only return the team name related to
         # the ID argument
         #### YOUR CODE HERE
-        return f"SELECT team_name FROM team where id = {id}"
-
+        f"SELECT team_name FROM team where id = {id}"
+        )
 
     # Below is method with an SQL query
     # This SQL query generates the data needed for
@@ -61,10 +61,9 @@ class Team(QueryBase):
     # is returns containing the execution of
     # the sql query
     #### YOUR CODE HERE
-    @query
     def model_data(self, id):
-
-        query_string =  f"""
+        return self.pandas_query(
+        f"""
             SELECT positive_events, negative_events FROM (
                     SELECT employee_id
                          , SUM(positive_events) positive_events
@@ -76,5 +75,4 @@ class Team(QueryBase):
                     GROUP BY employee_id
                    )
                 """
-        
-        return pd.DataFrame(query_string)
+        )

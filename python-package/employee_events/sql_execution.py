@@ -13,15 +13,18 @@ db_path = ROOT_DIR / 'employee_events/employee_events.db'
 
 # OPTION 1: MIXIN
 # Define a class called `QueryMixin`
-# class QueryMixin:
+class QueryMixin:
     
     # Define a method named `pandas_query`
     # that receives an sql query as a string
     # and returns the query's result
     # as a pandas dataframe
     #### YOUR CODE HERE
-    # def pandas_query(self, sqlquery):
-    #     return()
+    def pandas_query(self, sql_query):
+        #Open a connection to database
+        connection = connect(db_path)
+        # cursor = connection.cursor()
+        return pd.read_sql(sql_query, connection)
 
 
     # Define a method named `query`
@@ -30,7 +33,23 @@ db_path = ROOT_DIR / 'employee_events/employee_events.db'
     # a list of tuples. (You will need
     # to use an sqlite3 cursor)
     #### YOUR CODE HERE
-    
+    def query(self, sql_query):
+        
+        #Open a connection to database
+        connection = connect(db_path)
+        cursor = connection.cursor()
+
+        # Add try and except conditions for error handling
+        try:
+            result = cursor.execute(sql_query).fetchall()
+            return result
+        except Error as e:
+            print(f"Error occurred: {e}")
+        finally:
+            # Close cursor and connection
+            cursor.close()
+            connection.close()
+
 
  
  # Leave this code unchanged
@@ -67,8 +86,13 @@ def query(func):
 # test usage
 # @query
 # def testfunc():
-#     return "SELECT (first_name||' '||last_name), employee_id FROM employee"
+#     return (f"""select event_date, sum(positive_events) as positive_events, sum(negative_events) as negative_events
+#             from employee_events
+#             where employee_id = 1
+#             group by event_date 
+#             order by event_date""")
 
 # testresult = pd.DataFrame(testfunc())
 
 # print(testresult)
+
