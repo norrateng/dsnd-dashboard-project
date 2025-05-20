@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 #### YOUR CODE HERE
 from employee_events import QueryBase
 from employee_events import Employee, Team
+from sklearn.linear_model import LogisticRegression
 
 # import the load_model function from the utils.py file
 #### YOUR CODE HERE
@@ -97,7 +98,7 @@ class LineChart(MatplotlibViz):
         # Use the pandas .fillna method to fill nulls with 0
         #### YOUR CODE HERE
         df.fillna(0)
-        print(df)
+  
         # User the pandas .set_index method to set
         # the date column as the index
         #### YOUR CODE HERE
@@ -174,27 +175,30 @@ class BarChart(MatplotlibViz):
         # Using the predictor class attribute
         # pass the data to the `predict_proba` method
         #### YOUR CODE HERE
-        predict_proba_output = model.predict_proba(self.predictor)
+        # predict_proba_output = model.predict_proba(self.predictor)
+        predict_proba_output = self.predictor.predict_proba(df)
+        print('OLD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
+        print(predict_proba_output)
        
         # Index the second column of predict_proba output
         # The shape should be (<number of records>, 1)
         #### YOUR CODE HERE
-        predict_proba_output[:, 1].reshape(-1,1)
+        index_col = predict_proba_output[:, 1]
         
-        # Below, create a `pred` variable set to
+        # Below, create a `pred` variable1 set to
         # the number we want to visualize
         #
         # If the model's name attribute is "team"
         # We want to visualize the mean of the predict_proba output
         #### YOUR CODE HERE
         if model.name == "team":
-            pred = predict_proba_output.mean()
+            pred = index_col.mean()
             
         # Otherwise set `pred` to the first value
         # of the predict_proba output
         #### YOUR CODE HERE
         else:
-            pred = predict_proba_output[0]
+            pred = index_col[0]
         
         # Initialize a matplotlib subplot
         #### YOUR CODE HERE
@@ -241,7 +245,7 @@ class NotesTable(DataTable):
         # pass the entity_id to the model's .notes 
         # method. Return the output
         #### YOUR CODE HERE
-        return model.notes(model, entity_id)
+        return model.notes(entity_id)
     
 
 class DashboardFilters(FormGroup):

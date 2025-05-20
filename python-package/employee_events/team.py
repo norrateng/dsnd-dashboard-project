@@ -7,6 +7,7 @@ from .query_base import QueryBase
 # from .sql_execution import query, pandas_query
 import pandas as pd
 
+
 # Create a subclass of QueryBase
 # called  `Team`
 #### YOUR CODE HERE

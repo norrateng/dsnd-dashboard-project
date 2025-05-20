@@ -63,8 +63,10 @@ class QueryBase(QueryMixin):
         # for the table name in the `name` class attribute
         # YOUR CODE HERE
 
-        f"""select note_date, note
-            from notes
-            full join {self.name} on notes.{id} = {self.name}.{id}
+        f"""select a.note_date, a.note
+            from notes as a
+            full join {self.name} as b
+              on a.{self.name}_id = b.{self.name}_id
+            where a.{self.name}_id = {id}
             """
         )
