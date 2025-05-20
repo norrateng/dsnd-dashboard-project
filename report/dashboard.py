@@ -3,13 +3,10 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
 # Import QueryBase, Employee, Team from employee_events
-#### YOUR CODE HERE
 from employee_events import QueryBase
 from employee_events import Employee, Team
-# from sklearn.linear_model import LogisticRegression
 
 # import the load_model function from the utils.py file
-#### YOUR CODE HERE
 from utils import load_model
 
 """
@@ -30,29 +27,24 @@ from combined_components import FormGroup, CombinedComponent
 
 # Create a subclass of base_components/dropdown
 # called `ReportDropdown`
-#### YOUR CODE HERE
 class ReportDropdown(Dropdown):
     
     # Overwrite the build_component method
     # ensuring it has the same parameters
     # as the Report parent class's method
-    #### YOUR CODE HERE
     def build_component(self, entity_id, model):
         
         #  Set the `label` attribute so it is set
         #  to the `name` attribute for the model
-        #### YOUR CODE HERE
         self.label = model.name
         
         # Return the output from the
         # parent class's build_component method
-        #### YOUR CODE HERE
         return super().build_component(entity_id, model)
     
     # Overwrite the `component_data` method
     # Ensure the method uses the same parameters
     # as the parent class method
-    #### YOUR CODE HERE
     def component_data(self, entity_id, model):
         # Using the model argument
         # call the employee_events method
@@ -63,77 +55,57 @@ class ReportDropdown(Dropdown):
 
 # Create a subclass of base_components/BaseComponent
 # called `Header`
-#### YOUR CODE HERE
 class Header(BaseComponent):
 
     # Overwrite the `build_component` method
     # Ensure the method has the same parameters
     # as the parent class
-    #### YOUR CODE HERE
     def build_component(self, entity_id, model):
         
         # Using the model argument for this method
         # return a fasthtml H1 objects
         # containing the model's name attribute
-        #### YOUR CODE HERE
         return Div(H1(model))
           
 
 # Create a subclass of base_components/MatplotlibViz
 # called `LineChart`
-#### YOUR CODE HERE
 class LineChart(MatplotlibViz):
     
     # Overwrite the parent class's `visualization`
     # method. Use the same parameters as the parent
-    #### YOUR CODE HERE
     def visualization(self, entity_id, model):
 
         # Pass the `asset_id` argument to
         # the model's `event_counts` method to
         # receive the x (Day) and y (event count)
-        #### YOUR CODE HERE
         df = model.event_counts(entity_id)
          
         # Use the pandas .fillna method to fill nulls with 0
-        #### YOUR CODE HERE
         df = df.fillna(0)
   
         # User the pandas .set_index method to set
         # the date column as the index
-        #### YOUR CODE HERE
         df = df.set_index('event_date')
         
         # Sort the index
-        #### YOUR CODE HERE
         df = df.sort_index()
         
         # Use the .cumsum method to change the data
         # in the dataframe to cumulative counts
-        #### YOUR CODE HERE
         df = df.cumsum()
-        print(df)
+
         # Set the dataframe columns to the list
         # ['Positive', 'Negative']
-        #### YOUR CODE HERE
         df = df.set_axis(['Positive', 'Negative'], axis = 'columns')
-        print(df)
-        # positive = df['Positive'].values.tolist()
-        # negative = df['Negative'].values.tolist()
-        # event_date = df['event_date'].values.tolist()
         
         # Initialize a pandas subplot
         # and assign the figure and axis
         # to variables
-        #### YOUR CODE HERE
-        # fig, (ax1, ax2) = plt.subplots(1,2, sharey = False)
         fig, ax = plt.subplots(1,1)
+
         # call the .plot method for the
         # cumulative counts dataframe
-        #### YOUR CODE HERE
-        # ax1.plot(df['Positive'])
-        # ax2.plot(df['Negative'])
-        # ax1.plot(df)
         ax.plot(df['Positive'], label= 'Cumulative positive events')
         ax.plot(df['Negative'], label= 'Cumulative negative events')
         
@@ -144,12 +116,9 @@ class LineChart(MatplotlibViz):
         # the border color and font color to black. 
         # Reference the base_components/matplotlib_viz file 
         # to inspect the supported keyword arguments
-        #### YOUR CODE HERE
         super().set_axis_styling(ax, bordercolor='black', fontcolor='black')
-        # super().set_axis_styling(ax2, bordercolor='black', fontcolor='black')
         
         # Set title and labels for x and y axis
-        #### YOUR CODE HERE
         ax.set_title('Event Counts by Date', size=20)
         ax.set_xlabel('Event Date')
         ax.set_ylabel('Event Count')
@@ -159,55 +128,45 @@ class LineChart(MatplotlibViz):
 
 # Create a subclass of base_components/MatplotlibViz
 # called `BarChart`
-#### YOUR CODE HERE
 class BarChart(MatplotlibViz):
 
     # Create a `predictor` class attribute
     # assign the attribute to the output
     # of the `load_model` utils function
-    #### YOUR CODE HERE
     def __init__(self):
         self.predictor = load_model()
 
     # Overwrite the parent class `visualization` method
     # Use the same parameters as the parent
-    #### YOUR CODE HERE
     def visualization(self, entity_id, model):
 
         # Using the model and asset_id arguments
         # pass the `asset_id` to the `.model_data` method
         # to receive the data that can be passed to the machine
         # learning model
-        #### YOUR CODE HERE
         df = model.model_data(entity_id) 
         
         # Using the predictor class attribute
         # pass the data to the `predict_proba` method
-        #### YOUR CODE HERE
-        # predict_proba_output = model.predict_proba(self.predictor)
         predict_proba_output = self.predictor.predict_proba(df)
        
         # Index the second column of predict_proba output
         # The shape should be (<number of records>, 1)
-        #### YOUR CODE HERE
         index_col = predict_proba_output[:, 1]
         
         # Below, create a `pred` variable1 set to
         # the number we want to visualize
-        #
         # If the model's name attribute is "team"
         # We want to visualize the mean of the predict_proba output
-        #### YOUR CODE HERE
         if model.name == "team":
             pred = index_col.mean()
             
         # Otherwise set `pred` to the first value
         # of the predict_proba output
-        #### YOUR CODE HERE
         else:
             pred = index_col[0]
+
         # Initialize a matplotlib subplot
-        #### YOUR CODE HERE
         fig, ax = plt.subplots()
         
         # Run the following code unchanged
@@ -218,21 +177,18 @@ class BarChart(MatplotlibViz):
         # pass the axis variable
         # to the `.set_axis_styling`
         # method
-        #### YOUR CODE HERE
         super().set_axis_styling(ax, bordercolor='black', fontcolor='black')
         ax.set_xlabel('Level of risk')
 
  
 # Create a subclass of combined_components/CombinedComponent
 # called Visualizations       
-#### YOUR CODE HERE
 class Visualizations(CombinedComponent):
 
     # Set the `children`
     # class attribute to a list
     # containing an initialized
-    # instance of `LineChart` and `BarChart`
-    #### YOUR CODE HERE
+    # instance of `LineChart` and `BarChart`    
     def __init__(self):
         self.children = [LineChart(), BarChart()]
 
@@ -241,18 +197,18 @@ class Visualizations(CombinedComponent):
             
 # Create a subclass of base_components/DataTable
 # called `NotesTable`
-#### YOUR CODE HERE
+ 
 class NotesTable(DataTable):
 
     # Overwrite the `component_data` method
     # using the same parameters as the parent class
-    #### YOUR CODE HERE
+     
     def component_data(self, entity_id, model):
         
         # Using the model and entity_id arguments
         # pass the entity_id to the model's .notes 
         # method. Return the output
-        #### YOUR CODE HERE
+         
         return model.notes(entity_id)
     
 
@@ -276,7 +232,7 @@ class DashboardFilters(FormGroup):
     
 # Create a subclass of CombinedComponents
 # called `Report`
-#### YOUR CODE HERE
+ 
 class Report(CombinedComponent):
 
     # Set the `children`
@@ -284,16 +240,16 @@ class Report(CombinedComponent):
     # containing initialized instances 
     # of the header, dashboard filters,
     # data visualizations, and notes table
-    #### YOUR CODE HERE
+     
     def __init__(self):
         self.children = [Header(), DashboardFilters(), Visualizations(), NotesTable()]
 
 # Initialize a fasthtml app 
-#### YOUR CODE HERE
+ 
 app = FastHTML()
 
 # Initialize the `Report` class
-#### YOUR CODE HERE
+ 
 report = Report()
 
 @app.get("/ping")
@@ -302,7 +258,7 @@ def test():
 
 # Create a route for a get request
 # Set the route's path to the root
-#### YOUR CODE HERE
+ 
 @app.get("/")
 def get_main():
 
@@ -310,7 +266,7 @@ def get_main():
     # pass the integer 1 and an instance
     # of the Employee class as arguments
     # Return the result
-    #### YOUR CODE HERE
+     
     	return report(1, Employee())
 
 # Create a route for a get request
@@ -320,7 +276,7 @@ def get_main():
 # an ID of `2`. 
 # parameterize the employee ID 
 # to a string datatype
-#### YOUR CODE HERE
+ 
 @app.get("/employee/{id}")
 def get_employee(id:str):
 
@@ -328,7 +284,7 @@ def get_employee(id:str):
     # pass the ID and an instance
     # of the Employee SQL class as arguments
     # Return the result
-    #### YOUR CODE HERE
+     
     return report(id, Employee())
 
 # Create a route for a get request
@@ -338,7 +294,7 @@ def get_employee(id:str):
 # an ID of `2`. 
 # parameterize the team ID 
 # to a string datatype
-#### YOUR CODE HERE
+ 
 @app.get("/team/{id}")
 def get_team(id:str):
 
@@ -346,7 +302,7 @@ def get_team(id:str):
     # pass the id and an instance
     # of the Team SQL class as arguments
     # Return the result
-    #### YOUR CODE HERE
+     
     return report(id, Team())
 
 # Keep the below code unchanged!
@@ -360,30 +316,17 @@ def update_dropdown(r):
         return dropdown(None, Employee())
 
 
-# @app.post('/update_data')
-# async def update_data(r):
-#     from fasthtml.common import RedirectResponse
-#     data = await r.form()
-#     profile_type = data._dict['profile_type']
-#     id = data._dict['user-selection']
-#     if profile_type == 'Employee':
-#         return RedirectResponse(f"/employee/{id}", status_code=303)
-#     elif profile_type == 'Team':
-#         return RedirectResponse(f"/team/{id}", status_code=303)
-
 @app.post('/update_data')
 async def update_data(r):
     from fasthtml.common import RedirectResponse
     data = await r.form()
-    print(data._dict)  # Debug: Print the form data
-    profile_type = data._dict.get('profile_type')  # Use .get() to avoid KeyError
-    id = data._dict.get('user-selection')  # Use .get() to avoid KeyError
-    
+    profile_type = data._dict['profile_type']
+    id = data._dict['user-selection']
     if profile_type == 'Employee':
         return RedirectResponse(f"/employee/{id}", status_code=303)
     elif profile_type == 'Team':
         return RedirectResponse(f"/team/{id}", status_code=303)
 
 
-
 serve()
+ 
