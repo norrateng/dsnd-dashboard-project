@@ -150,7 +150,7 @@ class LineChart(MatplotlibViz):
         
         # Set title and labels for x and y axis
         #### YOUR CODE HERE
-        ax.set_title('Event Counts by Date', size=14)
+        ax.set_title('Event Counts by Date', size=20)
         ax.set_xlabel('Event Date')
         ax.set_ylabel('Event Count')
         ax.xaxis.set_major_locator(MaxNLocator(nbins=5)) 
@@ -220,6 +220,8 @@ class BarChart(MatplotlibViz):
         # method
         #### YOUR CODE HERE
         super().set_axis_styling(ax, bordercolor='black', fontcolor='black')
+        ax.set_xlabel('Level of risk')
+
  
 # Create a subclass of combined_components/CombinedComponent
 # called Visualizations       
