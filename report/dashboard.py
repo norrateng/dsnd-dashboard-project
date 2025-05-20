@@ -252,10 +252,6 @@ app = FastHTML()
  
 report = Report()
 
-@app.get("/ping")
-def test():
-    return "pong"
-
 # Create a route for a get request
 # Set the route's path to the root
  
