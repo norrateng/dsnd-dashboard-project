@@ -24,7 +24,6 @@ class QueryBase(QueryMixin):
         # YOUR CODE HERE
         return []
 
-
     # Define an `event_counts` method
     # that receives an `id` argument
     # This method should return a pandas dataframe

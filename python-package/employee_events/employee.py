@@ -26,7 +26,7 @@ class Employee(QueryBase):
     # from an sql execution
     #### YOUR CODE HERE
     def names(self):
-        return query(
+        return self.query(
         # Query 3
         # Write an SQL query
         # that selects two columns 
@@ -44,7 +44,7 @@ class Employee(QueryBase):
     # from an sql execution
     #### YOUR CODE HERE
     def username(self, id):
-        return query(
+        return self.query(
         # Query 4
         # Write an SQL query
         # that selects an employees full name
@@ -52,7 +52,7 @@ class Employee(QueryBase):
         # to only return the full name of the employee
         # with an id equal to the id argument
         #### YOUR CODE HERE
-        f"SELECT (first_name||' '||last_name), employee_id FROM employee where id = {id}"
+        f"SELECT (first_name||' '||last_name), employee_id FROM employee where employee_id = {id}"
         )
 
     # Below is method with an SQL query

@@ -32,7 +32,7 @@ class Team(QueryBase):
         # from the team table for all teams
         # in the database
         #### YOUR CODE HERE
-        return query(
+        return self.query(
         "SELECT team_name, team_id FROM team"
         )
 
@@ -43,7 +43,7 @@ class Team(QueryBase):
     #### YOUR CODE HERE
 
     def username(self, id):
-        return query(
+        return self.query(
         # Query 6
         # Write an SQL query
         # that selects the team_name column
@@ -51,7 +51,7 @@ class Team(QueryBase):
         # to only return the team name related to
         # the ID argument
         #### YOUR CODE HERE
-        f"SELECT team_name FROM team where id = {id}"
+        f"SELECT team_name FROM team where team_id = {id}"
         )
 
     # Below is method with an SQL query

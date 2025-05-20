@@ -1,11 +1,12 @@
 from fasthtml.common import * 
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 # Import QueryBase, Employee, Team from employee_events
 #### YOUR CODE HERE
 from employee_events import QueryBase
 from employee_events import Employee, Team
-from sklearn.linear_model import LogisticRegression
+# from sklearn.linear_model import LogisticRegression
 
 # import the load_model function from the utils.py file
 #### YOUR CODE HERE
@@ -57,8 +58,7 @@ class ReportDropdown(Dropdown):
         # call the employee_events method
         # that returns the user-type's
         # names and ids
-        # return model.username(entity_id)
-        return []
+        return model.names()
 
 
 # Create a subclass of base_components/BaseComponent
@@ -97,40 +97,45 @@ class LineChart(MatplotlibViz):
          
         # Use the pandas .fillna method to fill nulls with 0
         #### YOUR CODE HERE
-        df.fillna(0)
+        df = df.fillna(0)
   
         # User the pandas .set_index method to set
         # the date column as the index
         #### YOUR CODE HERE
-        df.set_index('event_date')
+        df = df.set_index('event_date')
         
         # Sort the index
         #### YOUR CODE HERE
-        df.sort_index()
+        df = df.sort_index()
         
         # Use the .cumsum method to change the data
         # in the dataframe to cumulative counts
         #### YOUR CODE HERE
-        df.cumsum()
-        
+        df = df.cumsum()
+        print(df)
         # Set the dataframe columns to the list
         # ['Positive', 'Negative']
         #### YOUR CODE HERE
-        positive = df['positive_events'].values.tolist()
-        negative = df['negative_events'].values.tolist()
-        event_date = df['event_date'].values.tolist()
+        df = df.set_axis(['Positive', 'Negative'], axis = 'columns')
+        print(df)
+        # positive = df['Positive'].values.tolist()
+        # negative = df['Negative'].values.tolist()
+        # event_date = df['event_date'].values.tolist()
         
         # Initialize a pandas subplot
         # and assign the figure and axis
         # to variables
         #### YOUR CODE HERE
-        fig, (ax1, ax2) = plt.subplots(1,2, sharey = False)
-        
+        # fig, (ax1, ax2) = plt.subplots(1,2, sharey = False)
+        fig, ax = plt.subplots(1,1)
         # call the .plot method for the
         # cumulative counts dataframe
         #### YOUR CODE HERE
-        ax1.plot(event_date, positive)
-        ax2.plot(event_date, negative)
+        # ax1.plot(df['Positive'])
+        # ax2.plot(df['Negative'])
+        # ax1.plot(df)
+        ax.plot(df['Positive'], label= 'Cumulative positive events')
+        ax.plot(df['Negative'], label= 'Cumulative negative events')
         
         # pass the axis variable
         # to the `.set_axis_styling`
@@ -140,12 +145,16 @@ class LineChart(MatplotlibViz):
         # Reference the base_components/matplotlib_viz file 
         # to inspect the supported keyword arguments
         #### YOUR CODE HERE
-        super().set_axis_styling(ax1, bordercolor='black', fontcolor='black')
-        super().set_axis_styling(ax2, bordercolor='black', fontcolor='black')
+        super().set_axis_styling(ax, bordercolor='black', fontcolor='black')
+        # super().set_axis_styling(ax2, bordercolor='black', fontcolor='black')
         
         # Set title and labels for x and y axis
         #### YOUR CODE HERE
-        ax1.set_title('Positive and Negative Event Counts by Date')
+        ax.set_title('Event Counts by Date', size=14)
+        ax.set_xlabel('Event Date')
+        ax.set_ylabel('Event Count')
+        ax.xaxis.set_major_locator(MaxNLocator(nbins=5)) 
+        ax.legend(loc='best')
 
 
 # Create a subclass of base_components/MatplotlibViz
@@ -177,8 +186,6 @@ class BarChart(MatplotlibViz):
         #### YOUR CODE HERE
         # predict_proba_output = model.predict_proba(self.predictor)
         predict_proba_output = self.predictor.predict_proba(df)
-        print('OLD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
-        print(predict_proba_output)
        
         # Index the second column of predict_proba output
         # The shape should be (<number of records>, 1)
@@ -199,7 +206,6 @@ class BarChart(MatplotlibViz):
         #### YOUR CODE HERE
         else:
             pred = index_col[0]
-        
         # Initialize a matplotlib subplot
         #### YOUR CODE HERE
         fig, ax = plt.subplots()
@@ -213,7 +219,7 @@ class BarChart(MatplotlibViz):
         # to the `.set_axis_styling`
         # method
         #### YOUR CODE HERE
-        super().set_axis_styling(ax)
+        super().set_axis_styling(ax, bordercolor='black', fontcolor='black')
  
 # Create a subclass of combined_components/CombinedComponent
 # called Visualizations       
@@ -291,10 +297,6 @@ report = Report()
 @app.get("/ping")
 def test():
     return "pong"
-# @app.route("/hello/{templated_variable}")
-# def get(templated_variable:str):
-	
-# 	return 'hello ' + templated_variable
 
 # Create a route for a get request
 # Set the route's path to the root
@@ -356,17 +358,30 @@ def update_dropdown(r):
         return dropdown(None, Employee())
 
 
+# @app.post('/update_data')
+# async def update_data(r):
+#     from fasthtml.common import RedirectResponse
+#     data = await r.form()
+#     profile_type = data._dict['profile_type']
+#     id = data._dict['user-selection']
+#     if profile_type == 'Employee':
+#         return RedirectResponse(f"/employee/{id}", status_code=303)
+#     elif profile_type == 'Team':
+#         return RedirectResponse(f"/team/{id}", status_code=303)
+
 @app.post('/update_data')
 async def update_data(r):
     from fasthtml.common import RedirectResponse
     data = await r.form()
-    profile_type = data._dict['profile_type']
-    id = data._dict['user-selection']
+    print(data._dict)  # Debug: Print the form data
+    profile_type = data._dict.get('profile_type')  # Use .get() to avoid KeyError
+    id = data._dict.get('user-selection')  # Use .get() to avoid KeyError
+    
     if profile_type == 'Employee':
         return RedirectResponse(f"/employee/{id}", status_code=303)
     elif profile_type == 'Team':
         return RedirectResponse(f"/team/{id}", status_code=303)
-    
+
 
 
 serve()
