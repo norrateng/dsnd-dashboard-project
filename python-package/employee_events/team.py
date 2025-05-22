@@ -1,5 +1,5 @@
 # Import the QueryBase class
-# YOUR CODE HERE
+
 from .query_base import QueryBase
 
 # Import dependencies for sql execution
