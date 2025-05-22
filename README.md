@@ -85,15 +85,42 @@ erDiagram
 
 ### How to setup
 Clone this repository
-
 Install python
 
-Create a virtual environment 
-python3 -m venv env
+#### Create a virtual environment 
+```bash
+python -m venv env
+```
 
-Activate the virtual environment
-source env/bin/activate
+#### Activate the virtual environment
+```bash
+env/scripts/activate.ps1
+```
 
-Install packages
-pip install -e .\python-package\
+#### Install setuptools
+```bash
+pip install setuptools
+```
+
+#### Python packages
+Build .tar.gz file in python-package/dist/
+```bash
+cd python-package
+python setup.py sdist
+cd ..
+```
+
+#### Install packages
+```bash
 pip install -r requirements.txt
+```
+
+#### Run dashboard
+```bash
+python ./report/dashboard.py
+```
+
+### Run Tests
+```bash
+pytest
+```
