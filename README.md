@@ -1,7 +1,7 @@
 
 # Software Engineering for Data Scientists 
 
-This repository contains starter code for the **Software Engineering for Data Scientists** final project. Please reference your course materials for documentation on this repository's structure and important files. Happy coding!
+This repository contains starter code for the **Software Engineering for Data Scientists** final project. This is a submission for the completed project.
 
 ### Repository Structure
 ```
@@ -79,3 +79,21 @@ erDiagram
   employee ||--o{ employee_events : "employee_id"
   notes }o--o{ employee_events : ""
 ```
+
+
+
+
+### How to setup
+Clone this repository
+
+Install python
+
+Create a virtual environment 
+python3 -m venv env
+
+Activate the virtual environment
+source env/bin/activate
+
+Install packages
+pip install -e .\python-package\
+pip install -r requirements.txt
