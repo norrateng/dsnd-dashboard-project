@@ -1,7 +1,6 @@
 # Import any dependencies needed to execute sql queries
 
 from .sql_execution import QueryMixin
-import pandas as pd
 
 # Define a class called QueryBase
 # Use inheritance to add methods
@@ -39,10 +38,12 @@ class QueryBase(QueryMixin):
             # Use f-string formatting to set the name
             # of id columns used for joining
             # order by the event_date column
-            f"""select event_date, sum(positive_events) as positive_events, sum(negative_events) as negative_events
-            from employee_events 
+            f"""select event_date,
+            sum(positive_events) as positive_events,
+            sum(negative_events) as negative_events
+            from employee_events
             where {self.name}_id = {id}
-            group by event_date 
+            group by event_date
             order by event_date
             """
         )

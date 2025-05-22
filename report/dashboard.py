@@ -1,9 +1,8 @@
-from fasthtml.common import *
+from fasthtml.common import Div, H1, FastHTML, serve
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 
 # Import QueryBase, Employee, Team from employee_events
-from employee_events import QueryBase
 from employee_events import Employee, Team
 
 # import the load_model function from the utils.py file

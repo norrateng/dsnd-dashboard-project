@@ -5,9 +5,6 @@ from .query_base import QueryBase
 # Import dependencies needed for sql execution
 # from the `sql_execution` module
 
-# from .sql_execution import query, pandas_query
-import pandas as pd
-
 # Define a subclass of QueryBase
 # called Employee
 
@@ -34,7 +31,7 @@ class Employee(QueryBase):
             # 2. The employee's id
             # This query should return the data
             # for all employees in the database
-            f"SELECT (first_name||' '||last_name), employee_id FROM employee"
+            "SELECT (first_name||' '||last_name), employee_id FROM employee"
         )
 
     # Define a method called `username`
@@ -50,7 +47,8 @@ class Employee(QueryBase):
             # Use f-string formatting and a WHERE filter
             # to only return the full name of the employee
             # with an id equal to the id argument
-            f"SELECT (first_name||' '||last_name), employee_id FROM employee where employee_id = {id}"
+            f"""SELECT (first_name||' '||last_name), employee_id
+            FROM employee where employee_id = {id}"""
         )
 
     # Below is method with an SQL query
