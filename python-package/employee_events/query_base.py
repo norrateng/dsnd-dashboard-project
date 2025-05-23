@@ -62,7 +62,7 @@ class QueryBase(QueryMixin):
             # for the table name in the `name` class attribute
             f"""select a.note_date, a.note
             from notes as a
-            full join {self.name} as b
+            left join {self.name} as b
               on a.{self.name}_id = b.{self.name}_id
             where a.{self.name}_id = {id}
             """
